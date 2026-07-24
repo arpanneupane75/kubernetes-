@@ -3248,3 +3248,508 @@ Failure → Remove Pod from Service.
 8. Which Kubernetes component uses Requests?
 9. What happens when a Readiness Probe fails?
 10. What happens when a Liveness Probe fails?
+---
+# Phase 10 & Phase 11 Interview Questions and Answers
+# Scaling & Kubernetes Operations
+
+---
+
+# Horizontal Pod Autoscaler (HPA)
+
+## Q1. What is Horizontal Pod Autoscaler (HPA)?
+
+**Answer:**
+
+Horizontal Pod Autoscaler (HPA) is a Kubernetes object that automatically increases or decreases the number of Pod replicas based on metrics such as CPU usage, memory usage, or custom metrics.
+
+---
+
+## Q2. Why do we need HPA?
+
+**Answer:**
+
+Application traffic constantly changes. During high traffic, more Pods are needed to handle requests, while during low traffic, excess Pods waste resources. HPA automatically adjusts the number of Pods to maintain performance and optimize resource usage.
+
+---
+
+## Q3. Does HPA increase CPU or Memory of a Pod?
+
+**Answer:**
+
+No.
+
+HPA increases or decreases the number of Pods.
+
+It does not change the CPU or Memory of existing Pods.
+
+---
+
+## Q4. What is Horizontal Scaling?
+
+**Answer:**
+
+Horizontal Scaling means increasing or decreasing the number of Pods.
+
+Example:
+
+3 Pods → 10 Pods
+
+---
+
+## Q5. What is Vertical Scaling?
+
+**Answer:**
+
+Vertical Scaling means increasing or decreasing the CPU or Memory allocated to a Pod instead of creating new Pods.
+
+---
+
+## Q6. Which Kubernetes object actually creates new Pods when HPA scales?
+
+**Answer:**
+
+HPA modifies the Deployment replica count.
+
+Deployment updates the ReplicaSet.
+
+ReplicaSet creates or removes Pods.
+
+---
+
+## Q7. Which metrics can HPA use?
+
+**Answer:**
+
+- CPU Usage
+- Memory Usage
+- Custom Metrics
+- External Metrics
+
+---
+
+## Q8. What is Metrics Server?
+
+**Answer:**
+
+Metrics Server is a Kubernetes component that collects CPU and Memory usage from Pods and Nodes and provides those metrics to HPA.
+
+---
+
+## Q9. What are Min Replicas?
+
+**Answer:**
+
+Minimum number of Pods HPA is allowed to maintain regardless of traffic.
+
+---
+
+## Q10. What are Max Replicas?
+
+**Answer:**
+
+Maximum number of Pods HPA is allowed to create regardless of traffic.
+
+---
+
+## Q11. Real-world Example
+
+**Answer:**
+
+Suppose a FastAPI application normally runs with 3 Pods.
+
+Traffic suddenly increases to 10,000 requests.
+
+HPA detects high CPU usage.
+
+It increases the Deployment replica count.
+
+ReplicaSet creates more Pods.
+
+When traffic decreases, HPA scales back to the minimum number of replicas.
+
+---
+
+# kubectl
+
+## Q1. What is kubectl?
+
+**Answer:**
+
+kubectl is the official Kubernetes command-line tool used to communicate with and manage Kubernetes clusters through the API Server.
+
+---
+
+## Q2. Why do we need kubectl?
+
+**Answer:**
+
+It is used to create, update, delete, monitor, and debug Kubernetes resources.
+
+---
+
+## Q3. Does kubectl communicate directly with worker nodes?
+
+**Answer:**
+
+No.
+
+kubectl sends requests to the API Server, which manages communication with the cluster.
+
+---
+
+## Q4. Which component receives kubectl requests?
+
+**Answer:**
+
+API Server.
+
+---
+
+## Q5. What is the purpose of `kubectl apply`?
+
+**Answer:**
+
+It creates a resource if it does not exist or updates it if it already exists.
+
+---
+
+## Q6. Difference between `kubectl create` and `kubectl apply`.
+
+| kubectl create | kubectl apply |
+|----------------|---------------|
+| Creates new resources | Creates or updates resources |
+| Fails if resource exists | Updates existing resources |
+
+---
+
+## Q7. What does `kubectl get pods` do?
+
+**Answer:**
+
+Displays all Pods in the current namespace.
+
+---
+
+## Q8. What does `kubectl get all` display?
+
+**Answer:**
+
+Displays common Kubernetes resources such as Pods, Deployments, ReplicaSets, and Services.
+
+---
+
+# kubectl logs
+
+## Q1. What is `kubectl logs`?
+
+**Answer:**
+
+A Kubernetes command used to view logs of a running container for debugging and monitoring.
+
+---
+
+## Q2. Why do we need it?
+
+**Answer:**
+
+To inspect runtime errors such as Python exceptions, database connection failures, authentication failures, and model loading issues.
+
+---
+
+## Q3. What does `kubectl logs pod-name` do?
+
+**Answer:**
+
+Displays logs of the container running inside the specified Pod.
+
+---
+
+## Q4. What does `kubectl logs -f pod-name` do?
+
+**Answer:**
+
+Continuously streams logs in real time.
+
+---
+
+## Q5. What does `kubectl logs --previous pod-name` do?
+
+**Answer:**
+
+Displays logs of the previous container before it restarted.
+
+---
+
+## Q6. Why do we use `-c container-name`?
+
+**Answer:**
+
+To view logs of a specific container in a multi-container Pod.
+
+---
+
+# kubectl describe
+
+## Q1. What is `kubectl describe`?
+
+**Answer:**
+
+A Kubernetes command used to display detailed information, configuration, status, conditions, and events of Kubernetes resources.
+
+---
+
+## Q2. Why do we need it?
+
+**Answer:**
+
+To diagnose scheduling failures, image pull failures, restart loops, and configuration issues.
+
+---
+
+## Q3. What information does it display?
+
+**Answer:**
+
+- Pod Name
+- Namespace
+- Node
+- Labels
+- IP Address
+- Container Information
+- Requests & Limits
+- Conditions
+- Events
+
+---
+
+## Q4. Which section is most useful?
+
+**Answer:**
+
+Events.
+
+---
+
+## Q5. Difference between `kubectl get` and `kubectl describe`.
+
+| kubectl get | kubectl describe |
+|--------------|------------------|
+| Summary | Detailed information |
+| Shows status | Shows configuration, conditions, and events |
+
+---
+
+## Q6. What does `FailedScheduling` mean?
+
+**Answer:**
+
+Scheduler could not place the Pod because of insufficient resources or scheduling constraints.
+
+---
+
+## Q7. What does `ImagePullBackOff` mean?
+
+**Answer:**
+
+Kubernetes failed to download the container image due to an incorrect image name or registry authentication issues.
+
+---
+
+# kubectl exec
+
+## Q1. What is `kubectl exec`?
+
+**Answer:**
+
+A Kubernetes command used to execute commands inside a running container for debugging and troubleshooting.
+
+---
+
+## Q2. Why do we need it?
+
+**Answer:**
+
+To inspect files, verify models, check environment variables, and debug applications from inside the container.
+
+---
+
+## Q3. Does `kubectl exec` connect directly to the worker node?
+
+**Answer:**
+
+No.
+
+It communicates through the API Server, which forwards the request to the kubelet.
+
+---
+
+## Q4. What does `kubectl exec -it pod-name -- /bin/bash` do?
+
+**Answer:**
+
+Opens an interactive Bash terminal inside the running container.
+
+---
+
+## Q5. What do `-i` and `-t` mean?
+
+**Answer:**
+
+- `-i` → Interactive mode
+- `-t` → Allocate a terminal
+
+---
+
+## Q6. Why might `/bin/sh` be used instead of `/bin/bash`?
+
+**Answer:**
+
+Some container images do not include Bash but provide a shell through `/bin/sh`.
+
+---
+
+## Q7. How do you enter a specific container?
+
+**Answer:**
+
+```bash
+kubectl exec -it pod-name -c container-name -- /bin/bash
+```
+
+---
+
+## Q8. Difference between `kubectl logs` and `kubectl exec`.
+
+| kubectl logs | kubectl exec |
+|---------------|--------------|
+| View logs | Execute commands inside container |
+| Read-only | Interactive |
+
+---
+
+# kubectl rollout
+
+## Q1. What is `kubectl rollout`?
+
+**Answer:**
+
+A Kubernetes command used to monitor Deployment updates, restart Deployments, view rollout history, and roll back to previous versions.
+
+---
+
+## Q2. Why do we need it?
+
+**Answer:**
+
+To safely manage application deployments with minimal downtime.
+
+---
+
+## Q3. What does `kubectl rollout status` do?
+
+**Answer:**
+
+Displays whether a Deployment has completed successfully.
+
+---
+
+## Q4. What does `kubectl rollout history` do?
+
+**Answer:**
+
+Displays the revision history of a Deployment.
+
+---
+
+## Q5. What does `kubectl rollout undo` do?
+
+**Answer:**
+
+Rolls back the Deployment to the previous stable revision.
+
+---
+
+## Q6. What is a rollout revision?
+
+**Answer:**
+
+A saved version of a Deployment created after every successful deployment.
+
+---
+
+## Q7. What does `kubectl rollout restart` do?
+
+**Answer:**
+
+Restarts all Pods managed by a Deployment without changing the image.
+
+---
+
+## Q8. Difference between `kubectl apply` and `kubectl rollout`.
+
+| kubectl apply | kubectl rollout |
+|----------------|-----------------|
+| Creates or updates resources | Manages deployment after update |
+
+---
+
+# kubectl scale
+
+## Q1. What is `kubectl scale`?
+
+**Answer:**
+
+A Kubernetes command used to manually increase or decrease the number of replicas of Deployments, ReplicaSets, or StatefulSets.
+
+---
+
+## Q2. Why do we need it?
+
+**Answer:**
+
+To immediately adjust the number of running Pods without modifying the Deployment YAML file.
+
+---
+
+## Q3. Does `kubectl scale` create Pods?
+
+**Answer:**
+
+No.
+
+It changes the replica count.
+
+Deployment and ReplicaSet create or remove Pods.
+
+---
+
+## Q4. Which Kubernetes object actually creates Pods?
+
+**Answer:**
+
+ReplicaSet.
+
+---
+
+## Q5. What does `kubectl scale deployment fastapi --replicas=10` do?
+
+**Answer:**
+
+Changes the Deployment replica count to 10, causing the ReplicaSet to create additional Pods until 10 replicas are running.
+
+---
+
+## Q6. Difference between `kubectl scale` and HPA.
+
+| kubectl scale | HPA |
+|----------------|-----|
+| Manual | Automatic |
+| User decides replicas | Metrics decide replicas |
+
+---
+
+## Q7. Real-world Example
+
+**Answer:**
+
+Before a product launch, manually scale a Deployment from 3 Pods to 20 Pods using `kubectl scale`. After traffic returns to normal, reduce it back to 3 Pods.
