@@ -2617,3 +2617,634 @@ A Job.
 - **Deployment → Run forever**
 - **Job → Run once**
 - **CronJob → Run on schedule**
+---
+# Kubernetes Phase 6 & 7 Interview Questions & Answers
+
+# Phase 6 — Resource Management
+
+Topics Covered
+
+- CPU Requests
+- Memory Requests
+- CPU Limits
+- Memory Limits
+- CPU Throttling
+- OOMKilled
+
+---
+
+# CPU Requests
+
+## 1. What is a CPU Request?
+
+**Answer:**
+
+A CPU Request is the minimum amount of CPU guaranteed to a Pod by Kubernetes. The Scheduler uses it to determine which worker node can run the Pod.
+
+---
+
+## 2. Why do we need CPU Requests?
+
+**Answer:**
+
+CPU Requests ensure that Pods are scheduled only on worker nodes with sufficient CPU resources, preventing resource over-allocation and guaranteeing minimum CPU for applications.
+
+---
+
+## 3. Which Kubernetes component uses CPU Requests?
+
+**Answer:**
+
+The **Scheduler**.
+
+---
+
+## 4. What happens if sufficient CPU is unavailable?
+
+**Answer:**
+
+The Pod remains in the **Pending** state until a worker node with enough available requested CPU becomes available.
+
+---
+
+## 5. Is CPU Request the maximum CPU a Pod can use?
+
+**Answer:**
+
+No.
+
+It is the **minimum guaranteed CPU**.
+
+---
+
+## 6. What problems do CPU Requests solve?
+
+**Answer:**
+
+- Guarantee minimum CPU
+- Help Scheduler place Pods
+- Prevent over-allocation
+- Improve resource planning
+
+---
+
+## 7. Give one real-world example.
+
+**Answer:**
+
+Suppose PostgreSQL requires at least **2 CPUs**.
+
+We configure:
+
+```
+CPU Request = 2
+```
+
+Kubernetes guarantees that the Pod will only be scheduled on a worker node with at least 2 CPUs available.
+
+---
+
+# Memory Requests
+
+## 8. What is a Memory Request?
+
+**Answer:**
+
+A Memory Request is the minimum amount of memory guaranteed to a Pod by Kubernetes. The Scheduler uses it while scheduling Pods.
+
+---
+
+## 9. Why do we need Memory Requests?
+
+**Answer:**
+
+Applications require different amounts of memory. Memory Requests ensure Pods are scheduled only on nodes with enough available memory.
+
+---
+
+## 10. Which Kubernetes component uses Memory Requests?
+
+**Answer:**
+
+The **Scheduler**.
+
+---
+
+## 11. What happens if enough memory is unavailable?
+
+**Answer:**
+
+The Pod remains in the **Pending** state.
+
+---
+
+## 12. Is Memory Request the maximum memory?
+
+**Answer:**
+
+No.
+
+It is the **minimum guaranteed memory**.
+
+---
+
+## 13. What problems do Memory Requests solve?
+
+**Answer:**
+
+- Guarantee minimum memory
+- Help Scheduler place Pods
+- Prevent memory over-allocation
+- Improve cluster utilization
+
+---
+
+## 14. Give one real-world example.
+
+**Answer:**
+
+Suppose PostgreSQL requires at least **4 GB RAM**.
+
+We configure:
+
+```
+Memory Request = 4Gi
+```
+
+The Pod is scheduled only on a node that can guarantee at least 4 GB RAM.
+
+---
+
+# CPU Limits
+
+## 15. What is a CPU Limit?
+
+**Answer:**
+
+A CPU Limit is the maximum amount of CPU a Pod is allowed to use.
+
+---
+
+## 16. Why do we need CPU Limits?
+
+**Answer:**
+
+CPU Limits prevent a single Pod from consuming all available CPU resources and affecting other Pods.
+
+---
+
+## 17. What happens if a Pod exceeds the CPU Limit?
+
+**Answer:**
+
+Kubernetes throttles the Pod's CPU usage to the configured limit.
+
+---
+
+## 18. What is CPU Throttling?
+
+**Answer:**
+
+CPU Throttling is the process of restricting a Pod's CPU usage when it attempts to exceed its configured CPU Limit.
+
+---
+
+## 19. Is the Pod killed when CPU Limit is exceeded?
+
+**Answer:**
+
+No.
+
+The Pod continues running with reduced CPU usage.
+
+---
+
+## 20. Give one example.
+
+**Answer:**
+
+```
+CPU Request = 1
+
+CPU Limit = 2
+```
+
+The Pod is guaranteed 1 CPU but can use up to 2 CPUs.
+
+If it tries to use 3 CPUs, Kubernetes throttles it back to 2 CPUs.
+
+---
+
+# Memory Limits
+
+## 21. What is a Memory Limit?
+
+**Answer:**
+
+A Memory Limit is the maximum amount of memory a Pod is allowed to use.
+
+---
+
+## 22. Why do we need Memory Limits?
+
+**Answer:**
+
+Memory Limits prevent a single Pod from consuming all available memory on a worker node.
+
+---
+
+## 23. What happens if a Pod exceeds its Memory Limit?
+
+**Answer:**
+
+Kubernetes immediately terminates the Pod.
+
+---
+
+## 24. What is OOMKilled?
+
+**Answer:**
+
+OOMKilled (Out Of Memory Killed) occurs when a Pod exceeds its configured Memory Limit and Kubernetes terminates it to protect the worker node.
+
+---
+
+## 25. Why is CPU throttled but memory killed?
+
+**Answer:**
+
+CPU can be slowed down without affecting system stability.
+
+Memory cannot.
+
+Exhausting memory can destabilize the operating system, so Kubernetes terminates the Pod.
+
+---
+
+# Requests vs Limits
+
+## 26. Difference between Requests and Limits.
+
+| Requests | Limits |
+|-----------|--------|
+| Minimum guaranteed resources | Maximum allowed resources |
+| Used by Scheduler | Enforced while running |
+| Determines Pod placement | Restricts resource usage |
+
+---
+
+## 27. Difference between CPU Limit and Memory Limit.
+
+| CPU Limit | Memory Limit |
+|------------|--------------|
+| Exceed → CPU Throttling | Exceed → OOMKilled |
+| Pod survives | Pod is terminated |
+
+---
+
+## 28. Give one real-world example using Requests and Limits.
+
+**Answer:**
+
+```
+CPU Request = 2
+
+CPU Limit = 4
+
+Memory Request = 4Gi
+
+Memory Limit = 8Gi
+```
+
+Meaning:
+
+- Guaranteed 2 CPUs and 4 GB RAM
+- Can use up to 4 CPUs and 8 GB RAM
+- Exceeding CPU Limit results in throttling
+- Exceeding Memory Limit results in OOMKilled
+
+---
+
+# Phase 7 — Health Checks
+
+Topics Covered
+
+- Liveness Probe
+- Readiness Probe
+- Startup Probe
+
+---
+
+# Liveness Probe
+
+## 29. What is a Liveness Probe?
+
+**Answer:**
+
+A Liveness Probe is a Kubernetes health check that determines whether an application is alive and functioning correctly.
+
+---
+
+## 30. Why do we need a Liveness Probe?
+
+**Answer:**
+
+Applications may become unresponsive because of:
+
+- Deadlocks
+- Infinite loops
+- Frozen processes
+
+Liveness Probes detect these issues and allow Kubernetes to restart the container.
+
+---
+
+## 31. What happens if the Liveness Probe fails?
+
+**Answer:**
+
+Kubernetes:
+
+- Marks the container unhealthy
+- Terminates it
+- Starts a new container
+
+---
+
+## 32. Does Liveness Probe restart the container?
+
+**Answer:**
+
+Yes.
+
+---
+
+## 33. Can an application be running but unhealthy?
+
+**Answer:**
+
+Yes.
+
+The process may still be running while the application is frozen or unresponsive.
+
+---
+
+## 34. What problems can Liveness Probe detect?
+
+**Answer:**
+
+- Deadlocks
+- Infinite loops
+- Frozen applications
+- Unresponsive services
+
+---
+
+## 35. Does Liveness Probe stop traffic?
+
+**Answer:**
+
+No.
+
+Traffic management is handled by the Readiness Probe.
+
+---
+
+## 36. Give one real-world example.
+
+**Answer:**
+
+Suppose a FastAPI application enters an infinite loop.
+
+The process is still alive, but every request hangs.
+
+The Liveness Probe detects the failure and Kubernetes restarts the container.
+
+---
+
+# Readiness Probe
+
+## 37. What is a Readiness Probe?
+
+**Answer:**
+
+A Readiness Probe determines whether an application is ready to receive user traffic.
+
+---
+
+## 38. Why do we need a Readiness Probe?
+
+**Answer:**
+
+Applications often require initialization before serving users.
+
+Examples:
+
+- Database connection
+- Loading ML models
+- Cache initialization
+- Configuration loading
+
+---
+
+## 39. What happens if the Readiness Probe fails?
+
+**Answer:**
+
+Kubernetes removes the Pod from the Service endpoints but keeps the container running.
+
+---
+
+## 40. Does Kubernetes restart the container?
+
+**Answer:**
+
+No.
+
+---
+
+## 41. Does the application continue running?
+
+**Answer:**
+
+Yes.
+
+Only traffic is stopped.
+
+---
+
+## 42. What happens when the application becomes ready again?
+
+**Answer:**
+
+Kubernetes automatically adds the Pod back to the Service and traffic resumes.
+
+---
+
+## 43. Does Readiness Probe remove traffic?
+
+**Answer:**
+
+Yes.
+
+---
+
+## 44. Give one real-world example.
+
+**Answer:**
+
+Suppose a FastAPI application loads a 5 GB ML model during startup.
+
+The container is running, but the model is still loading.
+
+The Readiness Probe prevents user traffic until loading completes.
+
+---
+
+# Startup Probe
+
+## 45. What is a Startup Probe?
+
+**Answer:**
+
+A Startup Probe determines whether an application has completed startup successfully.
+
+Until it succeeds, Kubernetes does not run Liveness or Readiness probes.
+
+---
+
+## 46. Why do we need a Startup Probe?
+
+**Answer:**
+
+Some applications require a long startup time.
+
+Without a Startup Probe, Liveness may repeatedly restart the application before startup completes.
+
+---
+
+## 47. What happens while the Startup Probe is running?
+
+**Answer:**
+
+- Startup Probe runs
+- Liveness Probe is disabled
+- Readiness Probe is disabled
+
+---
+
+## 48. What happens if the Startup Probe fails?
+
+**Answer:**
+
+Kubernetes marks the startup as failed, terminates the container, and starts a new one.
+
+---
+
+## 49. Does the Startup Probe run forever?
+
+**Answer:**
+
+No.
+
+It only runs during application startup.
+
+---
+
+## 50. When do Liveness and Readiness Probes start?
+
+**Answer:**
+
+Only after the Startup Probe succeeds.
+
+---
+
+## 51. Which applications commonly require a Startup Probe?
+
+**Answer:**
+
+- Large LLMs
+- Large ML models
+- Spring Boot applications
+- Large databases
+- Cache restoration systems
+
+---
+
+## 52. Difference between Startup, Liveness, and Readiness Probes.
+
+| Probe | Checks | Failure Result |
+|--------|--------|----------------|
+| Startup | Has the application finished starting? | Restart container |
+| Liveness | Is the application alive? | Restart container |
+| Readiness | Is the application ready for traffic? | Remove Pod from Service |
+
+---
+
+## 53. Give one real-world example.
+
+**Answer:**
+
+Suppose a FastAPI application loads a 20 GB LLM and takes 3 minutes to start.
+
+Without a Startup Probe, the Liveness Probe may restart the application every 30 seconds.
+
+Using a Startup Probe delays Liveness and Readiness until startup finishes, allowing the application to start successfully.
+
+---
+
+# Quick Revision
+
+## Requests
+
+- Minimum guaranteed resources
+- Used by Scheduler
+
+---
+
+## Limits
+
+- Maximum allowed resources
+- CPU → Throttling
+- Memory → OOMKilled
+
+---
+
+## Health Checks
+
+### Startup Probe
+
+Checks startup completion.
+
+Failure → Restart container.
+
+---
+
+### Liveness Probe
+
+Checks whether the application is alive.
+
+Failure → Restart container.
+
+---
+
+### Readiness Probe
+
+Checks whether the application is ready to receive traffic.
+
+Failure → Remove Pod from Service.
+
+---
+
+# Most Asked Interview Questions
+
+1. Difference between Requests and Limits.
+2. CPU Throttling vs OOMKilled.
+3. Difference between Liveness, Readiness, and Startup Probes.
+4. Why does Kubernetes throttle CPU but kill Pods exceeding Memory Limits?
+5. Can a container be running but not ready?
+6. Can a container be running but unhealthy?
+7. When should Startup Probe be used?
+8. Which Kubernetes component uses Requests?
+9. What happens when a Readiness Probe fails?
+10. What happens when a Liveness Probe fails?
