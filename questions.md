@@ -1233,3 +1233,1387 @@ Controller Manager
     ↓
 Keep it healthy.
 ```
+# Kubernetes Phase 3 Interview Questions & Answers
+## Topics Covered
+- ConfigMaps
+- Secrets
+
+---
+
+# ConfigMaps
+
+## 1. What is a ConfigMap?
+
+**Answer:**
+
+A ConfigMap is a Kubernetes object used to store non-sensitive configuration data as key-value pairs, allowing applications to separate configuration from application code.
+
+---
+
+## 2. Why do we need ConfigMaps?
+
+**Answer:**
+
+ConfigMaps separate configuration from application code so the same application image can be used across development, testing, and production without rebuilding Docker images.
+
+---
+
+## 3. What problem do ConfigMaps solve?
+
+**Answer:**
+
+Without ConfigMaps, every configuration change requires modifying the application code, rebuilding the Docker image, and redeploying the application.
+
+ConfigMaps eliminate this by storing configuration separately.
+
+---
+
+## 4. What type of data should be stored in ConfigMaps?
+
+**Answer:**
+
+Only non-sensitive configuration data.
+
+Examples:
+
+- Database Host
+- Database Port
+- API URL
+- Debug Mode
+- Model Name
+- Feature Flags
+- Log Level
+- Environment Variables
+
+---
+
+## 5. Can passwords be stored in ConfigMaps?
+
+**Answer:**
+
+No.
+
+Passwords, API Keys, JWT Secrets, Tokens, and certificates should never be stored inside ConfigMaps because ConfigMaps are stored as plain text.
+
+---
+
+## 6. Are ConfigMaps encrypted?
+
+**Answer:**
+
+No.
+
+ConfigMaps are stored as plain text.
+
+---
+
+## 7. What does "separating configuration from code" mean?
+
+**Answer:**
+
+Application logic remains unchanged while environment-specific configuration is stored in Kubernetes ConfigMaps.
+
+This allows the same application image to work in development, testing, and production using different configurations.
+
+---
+
+## 8. Why is separating configuration from code useful?
+
+**Answer:**
+
+- No image rebuild
+- Easier maintenance
+- Better portability
+- Environment-specific configuration
+- Simpler deployments
+
+---
+
+## 9. Can multiple Pods use the same ConfigMap?
+
+**Answer:**
+
+Yes.
+
+A single ConfigMap can be shared by multiple Pods.
+
+---
+
+## 10. Can ConfigMaps be updated?
+
+**Answer:**
+
+Yes.
+
+Configurations can be updated without changing application code or rebuilding Docker images.
+
+---
+
+## 11. Give five examples of ConfigMap values.
+
+**Answer:**
+
+- DATABASE_HOST
+- DATABASE_PORT
+- DEBUG
+- MODEL_NAME
+- LOG_LEVEL
+- API_URL
+- FEATURE_FLAG
+
+---
+
+## 12. What are the responsibilities of ConfigMaps?
+
+**Answer:**
+
+- Store configuration
+- Separate configuration from code
+- Share configuration across Pods
+- Environment-specific settings
+- Simplify deployments
+
+---
+
+## 13. Does ConfigMap contain application logic?
+
+**Answer:**
+
+No.
+
+It stores only configuration.
+
+---
+
+## 14. Does ConfigMap store sensitive information?
+
+**Answer:**
+
+No.
+
+Sensitive information belongs in Kubernetes Secrets.
+
+---
+
+## 15. Can the same Docker image use different ConfigMaps?
+
+**Answer:**
+
+Yes.
+
+That is one of the main advantages of ConfigMaps.
+
+---
+
+## 16. Difference between application code and ConfigMap.
+
+| Application Code | ConfigMap |
+|------------------|-----------|
+| Business logic | Configuration |
+| Same across environments | Changes across environments |
+| Stored inside image | Stored in Kubernetes |
+
+---
+
+# Secrets
+
+## 17. What is a Secret?
+
+**Answer:**
+
+A Secret is a Kubernetes object used to securely store and manage sensitive information such as passwords, API keys, JWT secrets, OAuth tokens, certificates, and credentials.
+
+---
+
+## 18. Why do we need Secrets?
+
+**Answer:**
+
+Secrets separate sensitive information from application code and ConfigMaps, improving security and simplifying credential management.
+
+---
+
+## 19. What problem do Secrets solve?
+
+**Answer:**
+
+Secrets prevent sensitive information from being hardcoded into source code, Docker images, or ConfigMaps.
+
+---
+
+## 20. What type of information belongs in Secrets?
+
+**Answer:**
+
+Examples:
+
+- Database Username
+- Database Password
+- API Keys
+- JWT Secrets
+- OAuth Tokens
+- TLS Certificates
+- SSH Keys
+- Cloud Credentials
+
+---
+
+## 21. Can passwords be stored in ConfigMaps?
+
+**Answer:**
+
+No.
+
+Passwords should always be stored inside Kubernetes Secrets.
+
+---
+
+## 22. Are Secrets encrypted by default?
+
+**Answer:**
+
+No.
+
+Secrets are Base64 encoded by default.
+
+Encryption at rest must be enabled separately.
+
+---
+
+## 23. What is Base64 encoding?
+
+**Answer:**
+
+Base64 is an encoding mechanism used to convert binary data into text.
+
+It is **not** a security mechanism.
+
+---
+
+## 24. What is encryption?
+
+**Answer:**
+
+Encryption protects data using cryptographic algorithms and requires a decryption key.
+
+Unlike Base64 encoding, encryption provides security.
+
+---
+
+## 25. Difference between Base64 encoding and encryption.
+
+| Base64 Encoding | Encryption |
+|-----------------|------------|
+| Encoding | Security |
+| Easily decoded | Requires decryption key |
+| No protection | Protects data |
+
+---
+
+## 26. How can applications consume Secrets?
+
+**Answer:**
+
+Applications can consume Secrets as:
+
+- Environment Variables
+- Mounted Files (Volumes)
+
+---
+
+## 27. Why should passwords never be hardcoded?
+
+**Answer:**
+
+Because they become visible in:
+
+- Source code
+- Git repositories
+- Docker images
+
+This creates major security risks.
+
+---
+
+## 28. What are the responsibilities of Secrets?
+
+**Answer:**
+
+- Store sensitive data
+- Separate secrets from application code
+- Improve security
+- Centralize credential management
+- Simplify secret updates
+
+---
+
+## 29. Can multiple Pods use the same Secret?
+
+**Answer:**
+
+Yes.
+
+Multiple Pods can use the same Secret.
+
+---
+
+## 30. Can Secrets be updated?
+
+**Answer:**
+
+Yes.
+
+Secrets can be updated without changing application code.
+
+---
+
+## 31. Give five examples of Secret values.
+
+**Answer:**
+
+- DB_PASSWORD
+- DB_USERNAME
+- JWT_SECRET
+- OPENAI_API_KEY
+- AWS_ACCESS_KEY
+- TLS Certificate
+- OAuth Token
+
+---
+
+## 32. Difference between ConfigMap and Secret.
+
+| ConfigMap | Secret |
+|------------|--------|
+| Non-sensitive data | Sensitive data |
+| Plain text | Base64 encoded by default |
+| Database host | Database password |
+| Debug mode | JWT Secret |
+| API URL | API Key |
+
+---
+
+## 33. Should API Keys be stored in Docker images?
+
+**Answer:**
+
+No.
+
+They should be stored in Kubernetes Secrets.
+
+---
+
+## 34. Can Kubernetes decode a Secret?
+
+**Answer:**
+
+Yes.
+
+Because Secrets are Base64 encoded, not encrypted.
+
+---
+
+## 35. Which should you use?
+
+### Database Host
+
+**ConfigMap**
+
+---
+
+### Database Password
+
+**Secret**
+
+---
+
+### Debug Mode
+
+**ConfigMap**
+
+---
+
+### JWT Secret
+
+**Secret**
+
+---
+
+### API URL
+
+**ConfigMap**
+
+---
+
+### API Key
+
+**Secret**
+
+---
+
+# ConfigMap vs Secret Summary
+
+| Feature | ConfigMap | Secret |
+|----------|-----------|--------|
+| Stores | Non-sensitive data | Sensitive data |
+| Default Storage | Plain text | Base64 encoded |
+| Passwords | ❌ No | ✅ Yes |
+| API Keys | ❌ No | ✅ Yes |
+| JWT Secret | ❌ No | ✅ Yes |
+| Database Host | ✅ Yes | ❌ No |
+| Debug Mode | ✅ Yes | ❌ No |
+
+---
+
+# Easy Memory Trick
+
+```
+Application
+        │
+        ▼
+
+Logic
+        │
+────────┼────────
+
+ConfigMap
+        │
+Public Configuration
+
+────────┼────────
+
+Secret
+        │
+Private Configuration
+```
+# Kubernetes Phase 4 Interview Questions & Answers
+## Topics Covered
+- Persistent Volumes (PV)
+- Persistent Volume Claims (PVC)
+
+---
+
+# Persistent Volumes (PV)
+
+## 1. What is a Persistent Volume (PV)?
+
+**Answer:**
+
+A Persistent Volume (PV) is a Kubernetes storage resource that provides persistent storage independent of the Pod lifecycle, allowing data to survive Pod recreation.
+
+---
+
+## 2. Why do we need Persistent Volumes?
+
+**Answer:**
+
+Pods are ephemeral.
+
+If a Pod crashes or is recreated, its local storage is lost.
+
+Persistent Volumes allow important application data to survive Pod failures.
+
+---
+
+## 3. What problem do Persistent Volumes solve?
+
+**Answer:**
+
+Persistent Volumes solve the problem of data loss caused by the temporary nature of Pods.
+
+---
+
+## 4. What happens to data stored inside a Pod if the Pod crashes?
+
+**Answer:**
+
+Data stored inside the Pod's local filesystem is lost because Pods are ephemeral.
+
+---
+
+## 5. Does a Persistent Volume disappear when a Pod is deleted?
+
+**Answer:**
+
+No.
+
+Persistent Volumes are independent of the Pod lifecycle.
+
+Deleting a Pod does not delete the Persistent Volume.
+
+---
+
+## 6. Who usually creates Persistent Volumes?
+
+**Answer:**
+
+Usually:
+
+- Cluster Administrator
+- Storage Administrator
+- Cloud Provider (AWS, Azure, GCP)
+
+---
+
+## 7. Give five examples of data stored inside a Persistent Volume.
+
+**Answer:**
+
+- Database files
+- ML Models
+- Uploaded Images
+- Videos
+- Logs
+- User Documents
+- Backups
+
+---
+
+## 8. Can a Pod exist without a Persistent Volume?
+
+**Answer:**
+
+Yes.
+
+Applications that do not need persistent storage can run without a PV.
+
+---
+
+## 9. Does a Persistent Volume belong to a Pod?
+
+**Answer:**
+
+No.
+
+A Persistent Volume exists independently of Pods.
+
+---
+
+## 10. Why is a Persistent Volume called "Persistent"?
+
+**Answer:**
+
+Because the storage remains even if Pods are deleted or recreated.
+
+---
+
+## 11. Does a Persistent Volume store application data?
+
+**Answer:**
+
+Yes.
+
+Persistent Volumes store the actual application data.
+
+---
+
+## 12. Can multiple Pods use a Persistent Volume?
+
+**Answer:**
+
+Yes.
+
+Depending on the supported access mode.
+
+---
+
+## 13. Responsibilities of Persistent Volumes.
+
+**Answer:**
+
+- Provide persistent storage
+- Store application data
+- Survive Pod recreation
+- Independent of Pod lifecycle
+- Support reusable storage
+
+---
+
+## 14. Examples of applications requiring PVs.
+
+**Answer:**
+
+- PostgreSQL
+- MySQL
+- MongoDB
+- File Storage
+- ML Model Storage
+- Logging Systems
+
+---
+
+## 15. Difference between Pod storage and Persistent Volume.
+
+| Pod Storage | Persistent Volume |
+|-------------|------------------|
+| Temporary | Persistent |
+| Lost when Pod dies | Survives Pod recreation |
+| Inside Pod | Independent resource |
+
+---
+
+# Persistent Volume Claims (PVC)
+
+## 16. What is a Persistent Volume Claim (PVC)?
+
+**Answer:**
+
+A Persistent Volume Claim (PVC) is a Kubernetes object that requests persistent storage from a Persistent Volume based on storage requirements such as capacity and access mode.
+
+---
+
+## 17. Why do we need PVC?
+
+**Answer:**
+
+PVC allows applications to request storage without knowing the actual storage implementation.
+
+---
+
+## 18. What problem do PVCs solve?
+
+**Answer:**
+
+PVC separates storage requests from storage implementation.
+
+Applications simply request storage, and Kubernetes finds a matching Persistent Volume.
+
+---
+
+## 19. Does a PVC store data?
+
+**Answer:**
+
+No.
+
+Persistent Volumes store data.
+
+PVC only requests storage.
+
+---
+
+## 20. Does a Pod communicate directly with a Persistent Volume?
+
+**Answer:**
+
+No.
+
+Flow:
+
+```text
+Pod
+ ↓
+PVC
+ ↓
+PV
+```
+
+---
+
+## 21. What information does a PVC request?
+
+**Answer:**
+
+Typically:
+
+- Storage Size
+- Access Mode
+
+---
+
+## 22. Who usually creates PVCs?
+
+**Answer:**
+
+Application Developers or DevOps Engineers create PVCs inside Kubernetes manifests.
+
+---
+
+## 23. Who usually creates Persistent Volumes?
+
+**Answer:**
+
+Usually:
+
+- Cluster Administrator
+- Cloud Provider
+- Storage Administrator
+
+---
+
+## 24. Can a PVC create a Persistent Volume?
+
+**Answer:**
+
+Normally no.
+
+However, when Dynamic Provisioning is enabled through a StorageClass, creating a PVC can automatically provision a PV.
+
+---
+
+## 25. Difference between PV and PVC.
+
+| PV | PVC |
+|----|-----|
+| Actual storage | Storage request |
+| Stores data | Requests data storage |
+| Created by admin/cloud | Created by developer |
+
+---
+
+## 26. Can one PVC use multiple Persistent Volumes?
+
+**Answer:**
+
+No.
+
+A PVC binds to one suitable Persistent Volume.
+
+---
+
+## 27. Can multiple Pods use the same PVC?
+
+**Answer:**
+
+Yes.
+
+Depending on the access mode supported by the Persistent Volume.
+
+---
+
+## 28. What happens if no matching Persistent Volume exists?
+
+**Answer:**
+
+The PVC remains in the Pending state until a suitable Persistent Volume becomes available.
+
+---
+
+## 29. What are the responsibilities of PVC?
+
+**Answer:**
+
+- Request storage
+- Specify storage requirements
+- Specify access mode
+- Connect Pods to Persistent Volumes
+
+---
+
+## 30. Explain the complete storage flow.
+
+```text
+Application
+      ↓
+Pod
+      ↓
+Persistent Volume Claim (PVC)
+      ↓
+Persistent Volume (PV)
+      ↓
+Physical Storage
+```
+
+---
+
+## 31. Explain the hotel analogy.
+
+**Answer:**
+
+Persistent Volume = Hotel Room
+
+Persistent Volume Claim = Reservation
+
+Pod = Customer
+
+The customer does not directly choose a room.
+
+Instead, the reservation system assigns a suitable room.
+
+---
+
+## 32. Why don't Pods directly use Persistent Volumes?
+
+**Answer:**
+
+Because Kubernetes abstracts storage using PVCs.
+
+Applications only specify their storage requirements.
+
+Kubernetes manages the actual storage allocation.
+
+---
+
+## 33. Can a Persistent Volume exist without a PVC?
+
+**Answer:**
+
+Yes.
+
+A Persistent Volume can exist even if no application is currently using it.
+
+---
+
+## 34. Can a PVC exist without a Pod?
+
+**Answer:**
+
+Yes.
+
+A PVC can exist before any Pod starts using it.
+
+---
+
+## 35. Does deleting a PVC always delete the Persistent Volume?
+
+**Answer:**
+
+Not necessarily.
+
+It depends on the Persistent Volume's reclaim policy (Retain, Delete, etc.).
+
+---
+
+# PV vs PVC Summary
+
+| Feature | PV | PVC |
+|----------|----|-----|
+| Purpose | Storage Resource | Storage Request |
+| Stores Data | ✅ Yes | ❌ No |
+| Created By | Admin / Cloud Provider | Developer |
+| Independent | Yes | No |
+| Used By | PVC | Pod |
+
+---
+
+# Easy Memory Trick
+
+```
+Persistent Volume
+        ↓
+Actual Storage
+
+---------------------
+
+Persistent Volume Claim
+        ↓
+Storage Request
+
+---------------------
+
+Pod
+        ↓
+Uses PVC
+```
+
+---
+
+# Most Asked Interview Questions
+
+### Does a Pod directly use a Persistent Volume?
+
+**No.**
+
+It uses a PVC.
+
+---
+
+### Does a PVC store data?
+
+**No.**
+
+The Persistent Volume stores the data.
+
+---
+
+### Who creates Persistent Volumes?
+
+- Cluster Administrator
+- Storage Administrator
+- Cloud Provider
+
+---
+
+### Who creates PVCs?
+
+Application Developers or DevOps Engineers.
+
+---
+
+### Why do we need Persistent Volumes?
+
+To prevent data loss caused by Pod recreation.
+
+---
+
+### What happens if a Pod crashes?
+
+The Pod is recreated.
+
+The Persistent Volume remains.
+
+The application can continue using the same data.
+---
+# Kubernetes Phase 5 Interview Questions & Answers
+## Topics Covered
+- Jobs
+- CronJobs
+
+---
+
+# Jobs
+
+## 1. What is a Job?
+
+**Answer:**
+
+A Job is a Kubernetes workload object that creates one or more Pods and ensures they successfully complete a one-time task.
+
+---
+
+## 2. Why do we need Jobs?
+
+**Answer:**
+
+Jobs are used to execute one-time tasks that should finish successfully instead of running continuously like a Deployment.
+
+Examples include:
+
+- Model training
+- Batch inference
+- Database migration
+- Database backup
+- Report generation
+- Data preprocessing
+
+---
+
+## 3. What problem do Jobs solve?
+
+**Answer:**
+
+Jobs solve the problem of executing one-time tasks that should terminate after successful completion instead of running forever.
+
+---
+
+## 4. What happens after a Job completes successfully?
+
+**Answer:**
+
+The Job is marked as **Completed**, and the Pod exits after finishing the assigned task.
+
+Unlike a Deployment, Kubernetes does not keep the Pod running.
+
+---
+
+## 5. What happens if a Job fails?
+
+**Answer:**
+
+The Job automatically creates another Pod and retries the task until it completes successfully (subject to the configured retry limit).
+
+---
+
+## 6. Does a Job run continuously?
+
+**Answer:**
+
+No.
+
+A Job runs only until the assigned task completes successfully.
+
+---
+
+## 7. Does a Job create Pods?
+
+**Answer:**
+
+Yes.
+
+A Job creates one or more Pods to execute the task.
+
+---
+
+## 8. Give five real-world use cases of Jobs.
+
+**Answer:**
+
+- ML model training
+- Batch inference
+- Database migration
+- Database backup
+- Report generation
+- Data preprocessing
+- File conversion
+
+---
+
+## 9. Can a Job create multiple Pods?
+
+**Answer:**
+
+Yes.
+
+Depending on its configuration (parallelism and completions), a Job can create multiple Pods.
+
+---
+
+## 10. Does a Job restart after successful completion?
+
+**Answer:**
+
+No.
+
+Once the Job completes successfully, it is marked as completed.
+
+---
+
+## 11. What happens if the Pod created by a Job crashes?
+
+**Answer:**
+
+The Job creates another Pod and retries the task until it succeeds or reaches its retry limit.
+
+---
+
+## 12. Difference between Deployment and Job.
+
+| Deployment | Job |
+|------------|-----|
+| Runs continuously | Runs until completion |
+| Long-running applications | One-time tasks |
+| Maintains Pods | Stops after success |
+| Web applications | Batch processing |
+
+---
+
+## 13. When should you use a Job instead of a Deployment?
+
+**Answer:**
+
+Whenever the workload should execute once and terminate.
+
+Examples:
+
+- Model training
+- Database migration
+- Data preprocessing
+- Database backup
+
+---
+
+## 14. Can a Job be used for a FastAPI application?
+
+**Answer:**
+
+No.
+
+FastAPI is a continuously running application and should use a Deployment.
+
+---
+
+## 15. Can a Job run forever?
+
+**Answer:**
+
+No.
+
+If continuous execution is required, use a Deployment.
+
+---
+
+# CronJobs
+
+## 16. What is a CronJob?
+
+**Answer:**
+
+A CronJob is a Kubernetes workload object that automatically creates Jobs according to a defined schedule using cron expressions.
+
+---
+
+## 17. Why do we need CronJobs?
+
+**Answer:**
+
+CronJobs automate recurring tasks so they do not need to be executed manually.
+
+---
+
+## 18. What problem do CronJobs solve?
+
+**Answer:**
+
+CronJobs automate periodic workloads such as backups, retraining, report generation, and maintenance tasks.
+
+---
+
+## 19. Does a CronJob create Pods directly?
+
+**Answer:**
+
+No.
+
+Flow:
+
+```text
+CronJob
+    ↓
+Job
+    ↓
+Pod
+    ↓
+Container
+    ↓
+Task
+```
+
+---
+
+## 20. Does a CronJob execute the task itself?
+
+**Answer:**
+
+No.
+
+It creates a Job, and the Job executes the task.
+
+---
+
+## 21. What is a cron expression?
+
+**Answer:**
+
+A cron expression defines the schedule on which a CronJob executes.
+
+Example:
+
+```text
+0 0 * * *
+```
+
+Meaning:
+
+Every day at **12:00 AM**
+
+---
+
+## 22. Give five real-world use cases of CronJobs.
+
+**Answer:**
+
+- Nightly database backups
+- Weekly ML model retraining
+- Monthly billing reports
+- Daily data preprocessing
+- Cache cleanup
+- Log cleanup
+- Scheduled emails
+- Database synchronization
+
+---
+
+## 23. Difference between Job and CronJob.
+
+| Job | CronJob |
+|------|----------|
+| Runs once | Runs on a schedule |
+| Manual execution | Automatic execution |
+| One-time task | Recurring task |
+
+---
+
+## 24. Can a CronJob exist without a Job?
+
+**Answer:**
+
+Yes.
+
+A CronJob is a scheduler.
+
+Whenever the scheduled time arrives, it creates a Job.
+
+---
+
+## 25. Does a CronJob continue existing after the Job finishes?
+
+**Answer:**
+
+Yes.
+
+The CronJob remains active because it is responsible for scheduling future Jobs.
+
+---
+
+## 26. Can a CronJob be used for one-time execution?
+
+**Answer:**
+
+Technically yes, but it is not recommended.
+
+For one-time execution, use a Job.
+
+---
+
+## 27. Give one example where you would use a CronJob instead of a Job.
+
+**Answer:**
+
+Weekly machine learning model retraining because it must execute automatically at regular intervals.
+
+---
+
+## 28. What are the responsibilities of a CronJob?
+
+**Answer:**
+
+- Schedule workloads
+- Automatically create Jobs
+- Automate recurring tasks
+- Reduce manual intervention
+
+---
+
+## 29. Can a CronJob create multiple Jobs?
+
+**Answer:**
+
+Yes.
+
+Every time the schedule is triggered, the CronJob creates a new Job.
+
+---
+
+## 30. What happens if a scheduled CronJob execution fails?
+
+**Answer:**
+
+The CronJob creates a Job.
+
+If that Job fails, the Job handles retries according to its retry policy.
+
+---
+
+# Job vs CronJob Summary
+
+| Feature | Job | CronJob |
+|----------|------|----------|
+| Purpose | One-time execution | Scheduled execution |
+| Runs | Once | Repeatedly |
+| Trigger | Manual | Automatic |
+| Creates Pods | Yes | Indirectly (through Jobs) |
+| Best Use | Batch processing | Periodic automation |
+
+---
+
+# Complete Workload Flow
+
+```text
+CronJob
+      │
+      ▼
+Job
+      │
+      ▼
+Pod
+      │
+      ▼
+Container
+      │
+      ▼
+Task Completed
+```
+
+---
+
+# Easy Memory Trick
+
+```
+Deployment
+      ↓
+Always Running
+
+------------------------
+
+Job
+      ↓
+Run Once
+
+------------------------
+
+CronJob
+      ↓
+Run on Schedule
+```
+
+---
+
+# Most Asked Interview Questions
+
+### Does a Job create Pods?
+
+**Yes.**
+
+---
+
+### Does a Job run continuously?
+
+**No.**
+
+---
+
+### What happens after a Job succeeds?
+
+The Job is marked as completed, and the Pod exits.
+
+---
+
+### Does a CronJob create Pods directly?
+
+**No.**
+
+CronJob → Job → Pod
+
+---
+
+### What does a CronJob create?
+
+A Job.
+
+---
+
+### Which object is used for nightly database backups?
+
+**CronJob**
+
+---
+
+### Which object is used for one-time database migration?
+
+**Job**
+
+---
+
+### Which object is used for weekly ML model retraining?
+
+**CronJob**
+
+---
+
+### Which object is used for one-time ML model training?
+
+**Job**
+
+---
+
+### Which object should be used for a FastAPI application?
+
+**Deployment**
+
+---
+
+### One-Line Revision
+
+- **Deployment → Run forever**
+- **Job → Run once**
+- **CronJob → Run on schedule**
